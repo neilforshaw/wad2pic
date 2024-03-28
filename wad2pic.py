@@ -45,8 +45,11 @@ Options:
                             [default: 1]
   --zstyle                  Use zDoom new linedef format
                             (similar to Hexen format).
+  --output FILENAME         output filename
+                            [default: test.png]
   --quiet                   Supress detailed messages during generation.
   --debug                   Print program stack trace in case of error.
+
 """
 
 
@@ -2539,7 +2542,10 @@ def generateMapPic(iWAD, options, mapName, pWAD=None):
     drawStats(im, titlepic, stats)
 
     # Save the image
-    im.save(wadName.split(".")[0]+"-"+mapName+".png")
+    if options["output"]:
+        im.save(options["output"])
+    else:
+        im.save(wadName.split(".")[0]+"-"+mapName+".png")
 
     return True
 
@@ -2592,6 +2598,8 @@ def wad2pic(iWAD, mapName=None, pWAD=None, options={}):
         options["difficulty"] = 4
     if "deathmatch" not in options:
         options["deathmatch"] = False
+    # if "outputname" not in options:
+    #    options["output"] = 'test.png'
     if "verbose" not in options:
         options["verbose"] = True
     if "debug" not in options:
@@ -2656,6 +2664,7 @@ def convertDocOptions(options):
         "shrink": int(options["--shrink"]),
         "difficulty": int(options["--skill"]),
         "deathmatch": options["--deathmatch"],
+        "output": options["--output"],
         "zStyle": options["--zstyle"],
         "verbose" : not options["--quiet"],
         "debug" : options["--debug"]
