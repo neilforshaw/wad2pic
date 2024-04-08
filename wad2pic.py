@@ -47,6 +47,7 @@ Options:
                             (similar to Hexen format).
   --output FILENAME         output filename
                             [default: test.png]
+  --hideInfo               Don't create map infomation in picture
   --quiet                   Supress detailed messages during generation.
   --debug                   Print program stack trace in case of error.
 
@@ -2539,7 +2540,8 @@ def generateMapPic(iWAD, options, mapName, pWAD=None):
         titlepic = getPicture(pData.getLump("TITLEPIC"), pallete)
 
     # Draw/write statistics info in the final image
-    drawStats(im, titlepic, stats)
+    if not options["hideInfo"]:
+        drawStats(im, titlepic, stats)
 
     # Save the image
     if options["output"]:
@@ -2598,12 +2600,12 @@ def wad2pic(iWAD, mapName=None, pWAD=None, options={}):
         options["difficulty"] = 4
     if "deathmatch" not in options:
         options["deathmatch"] = False
-    # if "outputname" not in options:
-    #    options["output"] = 'test.png'
     if "verbose" not in options:
         options["verbose"] = True
     if "debug" not in options:
         options["debug"] = False
+    if "hideInfo" not in options:
+        options["hideInfo"] = False
 
     # List of all possible map names (if "ALL"
     listOfMapNames = [mapName]
@@ -2666,6 +2668,7 @@ def convertDocOptions(options):
         "deathmatch": options["--deathmatch"],
         "output": options["--output"],
         "zStyle": options["--zstyle"],
+        "hideInfo": options["--hideInfo"],
         "verbose" : not options["--quiet"],
         "debug" : options["--debug"]
       }
